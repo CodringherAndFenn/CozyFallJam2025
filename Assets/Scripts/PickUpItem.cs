@@ -3,8 +3,9 @@ using UnityEngine;
 public class PickUpItem : MonoBehaviour
 {
 
-    public GameObject heldItem;
-    public GameObject itemToPickUp;
+    public GameObject heldItem; // should be invisible, but attached to the player
+    public GameObject itemToPickUp; // some item in the scene
+
     
     
 
@@ -17,15 +18,21 @@ public class PickUpItem : MonoBehaviour
     
     void Update()
     {
+        // this code might overlap with what stefan did
         if (Input.GetKeyDown(KeyCode.E))
         {
-            float distance = Vector3.Distance(transform.position, itemToPickUp.transform.position);
-            //float direction = Vector3.Angle();
-            if (distance < 2f) 
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 2f))
             {
-                itemToPickUp.SetActive(false); 
-                heldItem.SetActive(true);    
+                if (hit.transform.gameObject == itemToPickUp)
+                {
+                    itemToPickUp.SetActive(false);
+                    heldItem.SetActive(true);
+                }
             }
         }
+
     }
 }
