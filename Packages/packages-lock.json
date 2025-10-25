@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.roxdevvv.unityblendercontrol": {
+      "version": "https://github.com/RoxDevvv/Unity-Blender-Control-Style.git?path=/Assets/UnityBlenderControl",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "b59b016763ece7298de3cafb992b444c48ff17f6"
+    },
     "com.unity.ai.navigation": {
       "version": "2.0.9",
       "depth": 0,
@@ -33,8 +40,8 @@
       "dependencies": {
         "com.unity.burst": "1.8.23",
         "com.unity.mathematics": "1.3.2",
-        "com.unity.nuget.mono-cecil": "1.11.5",
         "com.unity.test-framework": "1.4.6",
+        "com.unity.nuget.mono-cecil": "1.11.5",
         "com.unity.test-framework.performance": "3.0.3"
       },
       "url": "https://packages.unity.com"
@@ -201,6 +208,16 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.toolchain.linux-x86_64": {
+      "version": "2.0.10",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.sysroot": "2.0.10",
+        "com.unity.sysroot.linux-x86_64": "2.0.9"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.toolchain.win-x86_64-linux-x86_64": {
       "version": "2.0.10",
       "depth": 0,
@@ -229,6 +246,13 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "wischeropp.jonas.scene-view-pie-menu": {
+      "version": "https://github.com/JonasWischeropp/unity-scene-view-pie-menu.git#1.1.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "1e28a225eca69a2abf4a791c7b11220c69dc4866"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
