@@ -12,10 +12,12 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.L) || Input.GetKeyDown(KeyCode.P))
         {
+            Debug.Log("Pause Key pressed");
             if (GameIsPaused)
             {
+                Debug.Log("Game is paused");
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
                 Resume();
