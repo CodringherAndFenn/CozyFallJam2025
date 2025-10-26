@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413e427f134ff5e4d82e25b5d51e76ed, type: 3}
+  m_Name: Item_SelfHelp
+  m_EditorClassIdentifier: 
+  itemName: Self Help Book
+  itemIcon: {fileID: 21300000, guid: 6a11408cefbf54842b7f19271466e426, type: 3}
+  itemDescription: "[On the coffee table, next to the sunchairs, he uncovers a stack
+    of wate and sun-damaged books. He flips a bit through the soggy pages]\r\n\t\t*Chapter
+    Seven: \"Recognizing your Grief patterns. Chapter twelve: \"Moving forward without
+    moving on.\" There's a whole industry, isn't there? Grief Incorporated. Everyone
+    seems to have a roadmap to guide you through this hell, as if there is some predetermined
+    route that you can set and your destination will certainly come with the promise
+    of healing.*\r\n\t\t*If I had just read these books before.. had we just gone
+    to the support group that Cassandra mentioned.. If I had been more attentive
+    during the pregnancy, noticed something sooner, pushed the doctors harder..*\r\n\t\t[He
+    stops himself]\r\n\t\t*Therapist said this is normal, the \"if only\" game. If
+    only we had chosen a different hospital. If only we'd waited another year.  Maybe
+    there was a checklist somewhere that i missed, a form i didn't fill out correctly
+    in order to be accepted in becoming a father. Sad that books dont have that chapter,
+    \"How to negotiate with God.\". Maybe then, he would have lived.*"

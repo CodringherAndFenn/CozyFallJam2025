@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413e427f134ff5e4d82e25b5d51e76ed, type: 3}
+  m_Name: Item_Playground
+  m_EditorClassIdentifier: 
+  itemName: Playground
+  itemIcon: {fileID: 21300000, guid: 90ef63669e91a7deab6b2e368c6c8f13, type: 3}
+  itemDescription: "[He stops at the swing set, covered in leaves]\r\n\t\t*I built
+    this in July. Thirty-five degree weather, breaking my back in the heat. Cassandra
+    was bringing me a refresher from time to time and laughing at my suffering.*\r\n\t\t*The
+    swing's never been swung and the slide's never been slid. And the worst part?
+    Im starting to forget what hope felt like. That feeling when you're building
+    something for the future, when you believe good things are coming, when you can
+    see past next week or next month. Now I'm just here, waiting for the days to
+    pass, going through motions, thinking what was it all for?*"

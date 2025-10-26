@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413e427f134ff5e4d82e25b5d51e76ed, type: 3}
+  m_Name: Item_Bible
+  m_EditorClassIdentifier: 
+  itemName: Bible
+  itemIcon: {fileID: 21300000, guid: 277c3918bb1e557409102334209349fd, type: 3}
+  itemDescription: "[He finds Cassandra's Bible]\r\n\t\t*Cassandra's had been reading
+    a lot of Job back then. I used to be able to tell by the tear stained pages.
+    \"The Lord gave, and the Lord has taken away.\"\r\n\t\tBut here's what I never
+    understood, WHAT did he actually give us? Nine months of hope? Ultrasound pictures
+    that look like old TV static? That was not giving, it was dangling a treat in
+    front of a hungry child. That was showing someone the promised land and then
+    burning it in front of them.*\r\n\t\t[He opens to a passage marked by his wife]\r\n\t\t*\"Before
+    i formed you in the womb, I knew you\". Then why didn't You save him? If You
+    knew him, if You had plans for him, if You counted every hair on his head before
+    they was hair to count, where were YOU when we needed YOU?*\r\n\t\t*The pastor
+    said, \"God needed another angel.\" I almost hit him, I wanted to scream in anger.
+    We needed a CHILD more than he needed an \"angel\". But instead I nodded. Shook
+    his hand and thanked him for the casserole*."

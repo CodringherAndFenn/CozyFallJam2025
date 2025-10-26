@@ -6,19 +6,32 @@ using System.Collections.Generic;
 public class InventoryUI : MonoBehaviour
 {
     [Header("Grid References")]
-    public Transform gridParent;       
-    public GameObject gridItemPrefab;   
+    public GameObject gridContainer;      // 👈 reference to your Scroll View or GridParent
+    public Transform gridParent;          // where the item buttons are spawned
+    public GameObject gridItemPrefab;     
 
     [Header("Details Panel")]
     public GameObject detailsPanel;
     public Image detailsIcon;
     public TMP_Text detailsTitle;
     public TMP_Text detailsBody;
+    public Button closeButton;            // 👈 optional close button reference
 
     private readonly List<GameObject> spawnedButtons = new List<GameObject>();
 
+    private void Start()
+    {
+        // Make sure only grid is visible on start
+        if (gridContainer) gridContainer.SetActive(true);
+        if (detailsPanel) detailsPanel.SetActive(false);
+
+        if (closeButton)
+            closeButton.onClick.AddListener(CloseDetails);
+    }
+
     public void Refresh(List<InventoryItem> items)
     {
+        // Clean up previous buttons
         foreach (GameObject go in spawnedButtons)
         {
             if (go != null)
@@ -26,6 +39,7 @@ public class InventoryUI : MonoBehaviour
         }
         spawnedButtons.Clear();
 
+        // Spawn buttons for collected items
         foreach (var item in items)
         {
             if (item == null) continue;
@@ -48,14 +62,18 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
-        detailsPanel.SetActive(false);
+        // Show grid and hide details when refreshed
+        if (gridContainer) gridContainer.SetActive(true);
+        if (detailsPanel) detailsPanel.SetActive(false);
     }
 
     public void ShowDetails(InventoryItem item)
     {
         if (item == null) return;
 
-        detailsPanel.SetActive(true);
+        // Hide the grid, show the details
+        if (gridContainer) gridContainer.SetActive(false);
+        if (detailsPanel) detailsPanel.SetActive(true);
 
         if (detailsIcon) detailsIcon.sprite = item.itemIcon;
         if (detailsTitle) detailsTitle.text = item.itemName;
@@ -64,6 +82,8 @@ public class InventoryUI : MonoBehaviour
 
     public void CloseDetails()
     {
-        detailsPanel.SetActive(false);
+        // Hide details, show grid again
+        if (detailsPanel) detailsPanel.SetActive(false);
+        if (gridContainer) gridContainer.SetActive(true);
     }
 }

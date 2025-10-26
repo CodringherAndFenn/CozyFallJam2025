@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413e427f134ff5e4d82e25b5d51e76ed, type: 3}
+  m_Name: Item_TeddyBear
+  m_EditorClassIdentifier: 
+  itemName: Teddy Bear
+  itemIcon: {fileID: 21300000, guid: 1dd371f456e38d543a08f4b8246e99d4, type: 3}
+  itemDescription: "[He finds a small teddy bear wedged against the garage door,
+    among some other toys]\r\n\t\t*Oh, buddy. You weren't supposed to be out here.
+    You're supposed to be inside, waiting on the shelf in the nursery. In the room
+    with angels and clouds painted on the ceiling*.\r\n\t\t[Picks up the teddy bear
+    and inspects it for a bit]\r\n\t\t*Cassandra's mother gave you to us. \"For when
+    the baby comes\", she said. The unfairness of it all, it's devastating*\r\n\t\t*I
+    kept telling Cassandra that we should donate these things. The clothes still
+    in packages, the little baby boy boots and toys we never used. It's so hard,
+    for both of us, to give something like this away, when this is all we have left
+    of him*\r\n\t\t[He holds the bars close for a while, then puts it in one of his
+    jacket pockets]\r\n\t\t*You're not trash little one, you are a memory, I will
+    not leave you here.*\r\n"

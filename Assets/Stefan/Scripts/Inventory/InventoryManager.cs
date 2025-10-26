@@ -54,8 +54,10 @@ public class InventoryManager : MonoBehaviour
 
     void Update()
     {
+        // Open/close inventory with I key
         if (Input.GetKeyDown(KeyCode.I))
         {
+            // prevent opening while inspecting
             if (InspectManager.IsInspecting)
                 return;
 
@@ -86,7 +88,7 @@ public class InventoryManager : MonoBehaviour
 
         if (isOpen)
         {
-            // --- OPEN INVENTORY ---
+            // ---------------- OPEN INVENTORY ----------------
             inventoryUI.Refresh(collected);
 
             if (dialogueSystem != null)
@@ -102,7 +104,7 @@ public class InventoryManager : MonoBehaviour
             if (starterInputs != null)
             {
                 starterInputs.cursorInputForLook = false;
-                starterInputs.cursorLocked = false; // 🔓 Prevent auto re-lock from OnApplicationFocus
+                starterInputs.cursorLocked = false; // ✅ prevent OnApplicationFocus from relocking
             }
 
             Cursor.lockState = CursorLockMode.None;
@@ -112,7 +114,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            // --- CLOSE INVENTORY ---
+            // ---------------- CLOSE INVENTORY ----------------
             Time.timeScale = 1f;
 
             if (dialogueSystem != null)
@@ -128,7 +130,7 @@ public class InventoryManager : MonoBehaviour
             if (starterInputs != null)
             {
                 starterInputs.cursorInputForLook = true;
-                starterInputs.cursorLocked = true; // 🔒 Allow normal lock again
+                starterInputs.cursorLocked = true; // ✅ allow gameplay cursor lock again
             }
 
             Cursor.lockState = CursorLockMode.Locked;

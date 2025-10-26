@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413e427f134ff5e4d82e25b5d51e76ed, type: 3}
+  m_Name: Item_Letters
+  m_EditorClassIdentifier: 
+  itemName: Letters
+  itemIcon: {fileID: 21300000, guid: 95df0f67cdb0ce24faf3de729f4097ee, type: 3}
+  itemDescription: 'Character spots a few wet, white envelopes underneath some leaves.
+    You can see they are hospital bills, insurance bills, personal letters and whatnot
+
+    There
+    they are, still sealed and in the same place as last year. Its a surprise you
+    can still make out some of the writing on them.
+
+    Funny thing about these
+    things. Once you read them, once you open them, they''re real, as real as it
+    gets. "We regret to inform you.""Our deepest condolences." Words that made us
+    realize that its true.
+
+    Cassandra couldn''t get herself to read the letters,
+    not even the ones from our family."For closure" i kept telling her, but is there
+    any closure, really? Nursery is still there, playground is there, and she is
+    still dead. That will not change, not with all the closure in the world
+
+'

@@ -98,11 +98,11 @@ namespace YueDestructibles
 
                 // apply propertie
                 rb.mass = rigid.mass / debris.Length;
-                rb.drag = rigid.drag;
-                rb.angularDrag = rigid.angularDrag;
+                rb.linearDamping = rigid.linearDamping;
+                rb.angularDamping = rigid.angularDamping;
 
                 // add velocity
-                rb.velocity = rigid.velocity;
+                rb.linearVelocity = rigid.linearVelocity;
                 rb.angularVelocity = rigid.angularVelocity;
 
                 // add impulse

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413e427f134ff5e4d82e25b5d51e76ed, type: 3}
+  m_Name: Item_Mug
+  m_EditorClassIdentifier: 
+  itemName: Broken China
+  itemIcon: {fileID: 21300000, guid: 2e119fd1677f11e49ba63d0cfc8451ad, type: 3}
+  itemDescription: "[While blowing leaves off of the flower bed, he finds a bunch
+    of shattered pieces of china]\r\n\t\t*Cassandra's aunt gave us this. \"For growing
+    your family\", she wrote on the card that came with this gift. A wonderful, hand
+    painted antique set of china.*\r\n\t\t[Picks up a shard]\r\n\t\t*We were so careful
+    with this thing. Wrapped in a million newspapers and pieces of bubble wrap like
+    it was the last china set on the planet. This antiquity survived for decades,
+    if not more than century, just to be lost in a matter of seconds, when our frustration
+    and anger grew too big to contain. None of this was fair to us, so why should
+    we care about this old thing?*"

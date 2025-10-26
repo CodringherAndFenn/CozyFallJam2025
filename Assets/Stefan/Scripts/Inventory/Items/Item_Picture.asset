@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413e427f134ff5e4d82e25b5d51e76ed, type: 3}
+  m_Name: Item_Picture
+  m_EditorClassIdentifier: 
+  itemName: 
+  itemIcon: {fileID: 0}
+  itemDescription: "[He walks back towards the house and looks at the picture at
+    the doorway]\r\n\t\t*But here we are now. Six months in, again. We haven't told
+    anyone. We probably won't for a while. We're not buying anything. Not planning
+    anything. Not hoping too hard, because hope, we've learned, is a dangerous thing.\r\n\t\tThat
+    couple in this picture loved each other enough to try for a child. And we...
+    we still have that love. Bruised. Scared. But still here. Still choosing each
+    other every morning when it would be easier to just... let go.\r\n\t\tOne day
+    at a time, one heartbeat at a time."
