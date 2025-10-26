@@ -4,11 +4,13 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using StarterAssets;
 using System.Collections;
+using System.Collections.Generic;
 
 public class InspectManager : MonoBehaviour
 {
     [Header("References")]
     public Transform inspectTarget;
+    public Camera inspectRenderCamera;
     public FirstPersonController fpc;
     public InspectSystem inspectSystem;
     public GameObject blurVolume;
@@ -18,28 +20,30 @@ public class InspectManager : MonoBehaviour
     public LayerMask interactLayer;
     public float outlineDistance = 5f;
     public float interactDistance = 3f;
-    [Tooltip("Select the layer used by your outline shader")]
-    public int outlineLayer;
+    public string outlineLayerName = "OutlinedObjects";
 
     [Header("Stability Settings")]
-    [Tooltip("Delay before outline disappears after losing sight")]
     public float outlineLossDelay = 0.05f;
 
     private Camera cam;
     private InspectableObject currentObject;
     private InspectableObject outlinedObject;
-    private int defaultLayer;
     private bool isInspecting = false;
     private float outlineLossTimer = 0f;
 
     private Volume blurVolumeComponent;
     private DepthOfField dof;
+    private readonly Dictionary<Transform, int> outlinedOriginalLayers = new Dictionary<Transform, int>();
+
+    [Header("Dialogue System")]
+    public InspectDialogueSystem dialogueSystem;
+
+    public static bool IsInspecting { get; private set; } = false;
 
     void Start()
     {
         cam = Camera.main;
 
-        // Cache DoF override
         if (blurVolume != null)
         {
             blurVolumeComponent = blurVolume.GetComponent<Volume>();
@@ -51,29 +55,37 @@ public class InspectManager : MonoBehaviour
             blurVolume.SetActive(false);
 
         inspectSystem.enabled = false;
-        interactText.gameObject.SetActive(false);
+        if (interactText != null) interactText.gameObject.SetActive(false);
+
+        if (inspectRenderCamera != null)
+            inspectRenderCamera.enabled = false;
     }
 
     void Update()
     {
+        // 🔒 Block interactions if inventory is open or another dialogue still active
+        if (InventoryManager.IsOpen || (InspectDialogueSystem.IsDialogueActive && !isInspecting))
+        {
+            if (outlinedObject != null) ClearOutline();
+            if (interactText != null) interactText.gameObject.SetActive(false);
+            return;
+        }
+
         if (!isInspecting)
         {
             HandleOutlineAndPrompt();
             HandleInteractionInput();
         }
-        else
+        else if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E))
         {
-            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E))
-            {
-                EndInspect();
-            }
+            EndInspect();
         }
     }
 
     void HandleOutlineAndPrompt()
     {
-        // Combine interact layer and outline layer so raycast keeps hitting outlined objects
-        int combinedLayerMask = interactLayer | (1 << outlineLayer);
+        int outlineLayerIndex = LayerMask.NameToLayer(outlineLayerName);
+        int combinedLayerMask = interactLayer | (1 << outlineLayerIndex);
 
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, outlineDistance, combinedLayerMask))
@@ -87,12 +99,11 @@ public class InspectManager : MonoBehaviour
                 {
                     ClearOutline();
                     outlinedObject = inspectable;
-                    defaultLayer = outlinedObject.gameObject.layer;
-                    outlinedObject.gameObject.layer = outlineLayer;
+                    CacheAndSetOutlineLayers(outlinedObject.transform, outlineLayerIndex);
                 }
 
                 float distance = Vector3.Distance(cam.transform.position, hit.point);
-                interactText.gameObject.SetActive(distance <= interactDistance);
+                if (interactText != null) interactText.gameObject.SetActive(distance <= interactDistance);
                 return;
             }
         }
@@ -101,7 +112,7 @@ public class InspectManager : MonoBehaviour
         if (outlineLossTimer >= outlineLossDelay)
         {
             ClearOutline();
-            interactText.gameObject.SetActive(false);
+            if (interactText != null) interactText.gameObject.SetActive(false);
         }
     }
 
@@ -113,8 +124,7 @@ public class InspectManager : MonoBehaviour
             if (distance <= interactDistance)
             {
                 StartInspect(outlinedObject);
-                ClearOutline();
-                interactText.gameObject.SetActive(false);
+                if (interactText != null) interactText.gameObject.SetActive(false);
             }
         }
     }
@@ -124,26 +134,32 @@ public class InspectManager : MonoBehaviour
         Vector3 direction = (hit.point - cam.transform.position).normalized;
         float distance = Vector3.Distance(cam.transform.position, hit.point);
         if (Physics.Raycast(cam.transform.position, direction, out RaycastHit obstacle, distance, ~0))
-        {
             return obstacle.collider == hit.collider;
-        }
         return false;
     }
 
     void StartInspect(InspectableObject obj)
     {
+        ClearOutline();
+
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.SlowForInspect();
+
         isInspecting = true;
+        IsInspecting = true;
         currentObject = obj;
         obj.StartInspection(inspectTarget);
 
-        fpc.enabled = false;
+        if (dialogueSystem != null && !string.IsNullOrEmpty(obj.inspectDescription))
+            dialogueSystem.StartDialogue(obj.inspectDescription);
+
+        if (fpc != null) fpc.enabled = false;
         inspectSystem.objectToInspect = obj.transform;
         inspectSystem.enabled = true;
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        // Focus camera on the inspected object distance
         if (dof != null)
         {
             float distance = Vector3.Distance(cam.transform.position, obj.transform.position);
@@ -151,40 +167,79 @@ public class InspectManager : MonoBehaviour
         }
 
         StartCoroutine(FadeBlur(true));
+
+        if (inspectRenderCamera != null)
+            inspectRenderCamera.enabled = true;
     }
 
     void EndInspect()
     {
         if (currentObject != null)
         {
+            var pickup = currentObject.GetComponent<PickupWhenInspected>();
+            if (pickup != null && pickup.item != null)
+            {
+                InventoryManager.Instance.Add(pickup.item);
+                currentObject.gameObject.SetActive(false);
+            }
+
             currentObject.EndInspection();
             currentObject = null;
         }
 
-        fpc.enabled = true;
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.ResumeNormal();
+
+        if (fpc != null) fpc.enabled = true;
         inspectSystem.enabled = false;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        isInspecting = false;
 
-        // Reset focus distance to far (clear blur)
+        isInspecting = false;
+        IsInspecting = false;
+
         if (dof != null)
             dof.focusDistance.value = 10f;
 
         StartCoroutine(FadeBlur(false));
+
+        if (inspectRenderCamera != null)
+            inspectRenderCamera.enabled = false;
+    }
+
+    void CacheAndSetOutlineLayers(Transform target, int outlineLayer)
+    {
+        outlinedOriginalLayers.Clear();
+        CacheLayersRecursive(target);
+        SetLayerRecursive(target, outlineLayer);
     }
 
     void ClearOutline()
     {
-        if (outlinedObject != null)
+        foreach (var kvp in outlinedOriginalLayers)
         {
-            outlinedObject.gameObject.layer = defaultLayer;
-            outlinedObject = null;
+            if (kvp.Key)
+                kvp.Key.gameObject.layer = kvp.Value;
         }
+        outlinedOriginalLayers.Clear();
+        outlinedObject = null;
     }
 
-    // Smooth blur fade
+    void CacheLayersRecursive(Transform t)
+    {
+        outlinedOriginalLayers[t] = t.gameObject.layer;
+        for (int i = 0; i < t.childCount; i++)
+            CacheLayersRecursive(t.GetChild(i));
+    }
+
+    void SetLayerRecursive(Transform t, int layer)
+    {
+        t.gameObject.layer = layer;
+        for (int i = 0; i < t.childCount; i++)
+            SetLayerRecursive(t.GetChild(i), layer);
+    }
+
     IEnumerator FadeBlur(bool enable)
     {
         if (blurVolumeComponent == null) yield break;
