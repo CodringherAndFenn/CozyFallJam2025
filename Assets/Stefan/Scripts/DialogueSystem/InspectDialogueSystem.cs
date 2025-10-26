@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-
+using UnityEngine.Audio;
 public class InspectDialogueSystem : MonoBehaviour
 {
     [Header("UI References")]
@@ -41,7 +41,7 @@ public class InspectDialogueSystem : MonoBehaviour
 
     private string currentText = "";
     private int currentCharIndex = 0;
-
+    public AudioMixerGroup sfxMixerGroup;
     void Awake()
     {
         if (dialogueBox == null)
@@ -54,7 +54,12 @@ public class InspectDialogueSystem : MonoBehaviour
         canvasGroup = dialogueBox.GetComponent<CanvasGroup>();
         if (canvasGroup == null) canvasGroup = dialogueBox.AddComponent<CanvasGroup>();
         canvasGroup.alpha = 0f;
-
+        
+        if (blipSource != null && sfxMixerGroup != null)
+        {
+            blipSource.outputAudioMixerGroup = sfxMixerGroup;
+        }
+        
         dialogueBox.SetActive(false);
 
         textChunks = new Queue<string>();

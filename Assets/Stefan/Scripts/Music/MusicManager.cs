@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Audio;
 
 [RequireComponent(typeof(AudioSource))]
 public class MusicManager : MonoBehaviour
@@ -23,6 +24,7 @@ public class MusicManager : MonoBehaviour
     private AudioSource source;
     private int currentTrackIndex = 0;
 
+    public AudioMixerGroup musicMixerGroup;
     void Awake()
     {
         if (Instance != null)
@@ -34,6 +36,7 @@ public class MusicManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         source = GetComponent<AudioSource>();
+        source.outputAudioMixerGroup = musicMixerGroup;
         source.loop = false;
         source.playOnAwake = false;
         source.volume = musicVolume;
