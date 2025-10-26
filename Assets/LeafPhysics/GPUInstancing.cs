@@ -12,6 +12,8 @@ namespace LeafPhysics.Code
 {
     public class GPUInstancing : MonoBehaviour
     {
+        [HideInInspector] public bool DoUpdate = true;
+        
         [SerializeField] private bool useSingleMatrix = true;
         [SerializeField] private bool useJobs;
         [SerializeField] private int instanceCount;

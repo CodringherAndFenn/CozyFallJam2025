@@ -2412,6 +2412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inspectTarget: {fileID: 345577950}
+  inspectRenderCamera: {fileID: 0}
   fpc: {fileID: 5393215579111688475}
   inspectSystem: {fileID: 1603194781}
   blurVolume: {fileID: 1175566775}
@@ -2421,8 +2422,9 @@ MonoBehaviour:
     m_Bits: 1
   outlineDistance: 5
   interactDistance: 3
-  outlineLayer: 3
+  outlineLayerName: OutlinedObjects
   outlineLossDelay: 0.05
+  dialogueSystem: {fileID: 0}
 --- !u!1001 &682942796
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4233,6 +4235,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8718778828885884488, guid: e5f4daf24146ee040b5a2d7a73b30aa0, type: 3}
   m_PrefabInstance: {fileID: 1030707022}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1062786639 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8762286023885395322, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
+  m_PrefabInstance: {fileID: 7288094137546172433}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1071771423
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5176,6 +5183,7 @@ MonoBehaviour:
   mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   material: {fileID: 2100000, guid: b29b7bbaa3ed34e4ea4eca6c82b71729, type: 2}
   head: {fileID: 5393215579111688474}
+  origin: {fileID: 1062786639}
 --- !u!1 &1485304824 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a7ab5095e6232f94c873cdb73a6d4753, type: 3}
@@ -5193,6 +5201,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10b64037197e0b14989ec42eab3cfa8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inspectDescription: 
+  pickup: {fileID: 0}
+  moveSpeed: 8
+  scaleFactor: 0.8
+  viewDistance: 0.2
 --- !u!64 &1485304826
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5842,6 +5855,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10b64037197e0b14989ec42eab3cfa8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inspectDescription: 
+  pickup: {fileID: 0}
+  moveSpeed: 8
+  scaleFactor: 0.8
+  viewDistance: 0.2
 --- !u!1001 &1690830933
 PrefabInstance:
   m_ObjectHideFlags: 0
