@@ -27,6 +27,7 @@ namespace LeafPhysics.Code
         [SerializeField] private Mesh mesh;
         [SerializeField] private Material material;
         [SerializeField] private Transform head;
+        [SerializeField] private Transform origin;
 
         private Matrix4x4[] allMatrices;
         private Vector3[] allVelocities;
@@ -57,7 +58,7 @@ namespace LeafPhysics.Code
                 for (int i = 0; i < instanceCount; i++)
                 {
                     var newPos = new Vector3(Random.Range(-positionRange.x, positionRange.x), spawnHeight,
-                        Random.Range(-positionRange.y, positionRange.y));
+                        Random.Range(-positionRange.y, positionRange.y)) + origin.position;
                     var randomRotate = new Vector3(0, Random.Range(-360, 360), 0);
                     var scale = Random.Range(scaleRange.x, scaleRange.y);
                     var randomScale = Vector3.one * scale;
@@ -77,7 +78,7 @@ namespace LeafPhysics.Code
                     for (int j = 0; j < 1023; j++)
                     {
                         var newPos = new Vector3(Random.Range(-positionRange.x, positionRange.x), spawnHeight,
-                            Random.Range(-positionRange.y, positionRange.y));
+                            Random.Range(-positionRange.y, positionRange.y)) + origin.position;
                         var randomRotate = new Vector3(0, Random.Range(-360, 360), 0);
                         var scale = Random.Range(scaleRange.x, scaleRange.y);
                         var randomScale = Vector3.one * scale;
