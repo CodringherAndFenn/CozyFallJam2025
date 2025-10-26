@@ -38,6 +38,8 @@ public class InspectManager : MonoBehaviour
     [Header("Dialogue System")]
     public InspectDialogueSystem dialogueSystem;
 
+    public static bool IsInspecting { get; private set; } = false;
+
     void Start()
     {
         cam = Camera.main;
@@ -53,7 +55,7 @@ public class InspectManager : MonoBehaviour
             blurVolume.SetActive(false);
 
         inspectSystem.enabled = false;
-        interactText.gameObject.SetActive(false);
+        if (interactText != null) interactText.gameObject.SetActive(false);
 
         if (inspectRenderCamera != null)
             inspectRenderCamera.enabled = false;
@@ -61,6 +63,14 @@ public class InspectManager : MonoBehaviour
 
     void Update()
     {
+        // 🔒 Block interactions if inventory is open or another dialogue still active
+        if (InventoryManager.IsOpen || (InspectDialogueSystem.IsDialogueActive && !isInspecting))
+        {
+            if (outlinedObject != null) ClearOutline();
+            if (interactText != null) interactText.gameObject.SetActive(false);
+            return;
+        }
+
         if (!isInspecting)
         {
             HandleOutlineAndPrompt();
@@ -93,7 +103,7 @@ public class InspectManager : MonoBehaviour
                 }
 
                 float distance = Vector3.Distance(cam.transform.position, hit.point);
-                interactText.gameObject.SetActive(distance <= interactDistance);
+                if (interactText != null) interactText.gameObject.SetActive(distance <= interactDistance);
                 return;
             }
         }
@@ -102,7 +112,7 @@ public class InspectManager : MonoBehaviour
         if (outlineLossTimer >= outlineLossDelay)
         {
             ClearOutline();
-            interactText.gameObject.SetActive(false);
+            if (interactText != null) interactText.gameObject.SetActive(false);
         }
     }
 
@@ -113,9 +123,8 @@ public class InspectManager : MonoBehaviour
             float distance = Vector3.Distance(cam.transform.position, outlinedObject.transform.position);
             if (distance <= interactDistance)
             {
-                // 👇 Remove ClearOutline() here
                 StartInspect(outlinedObject);
-                interactText.gameObject.SetActive(false);
+                if (interactText != null) interactText.gameObject.SetActive(false);
             }
         }
     }
@@ -131,19 +140,20 @@ public class InspectManager : MonoBehaviour
 
     void StartInspect(InspectableObject obj)
     {
-        // First, restore its normal layer (Default) before inspection
         ClearOutline();
 
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.SlowForInspect();
+
         isInspecting = true;
+        IsInspecting = true;
         currentObject = obj;
-        obj.StartInspection(inspectTarget); // This sets Inspect layer
+        obj.StartInspection(inspectTarget);
 
         if (dialogueSystem != null && !string.IsNullOrEmpty(obj.inspectDescription))
-        {
             dialogueSystem.StartDialogue(obj.inspectDescription);
-        }
 
-        fpc.enabled = false;
+        if (fpc != null) fpc.enabled = false;
         inspectSystem.objectToInspect = obj.transform;
         inspectSystem.enabled = true;
 
@@ -165,27 +175,29 @@ public class InspectManager : MonoBehaviour
     void EndInspect()
     {
         if (currentObject != null)
-    {
-        // --- NEW: add to inventory if it has a pickup ---
-        var pickup = currentObject.GetComponent<PickupWhenInspected>();
-        if (pickup != null && pickup.item != null)
         {
-            InventoryManager.Instance.Add(pickup.item);
-            // Hide the world object after collecting
-            currentObject.gameObject.SetActive(false);
-        }
-        // -------------------------------------------------
+            var pickup = currentObject.GetComponent<PickupWhenInspected>();
+            if (pickup != null && pickup.item != null)
+            {
+                InventoryManager.Instance.Add(pickup.item);
+                currentObject.gameObject.SetActive(false);
+            }
 
-        currentObject.EndInspection();
-        currentObject = null;
+            currentObject.EndInspection();
+            currentObject = null;
         }
 
-        fpc.enabled = true;
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.ResumeNormal();
+
+        if (fpc != null) fpc.enabled = true;
         inspectSystem.enabled = false;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
         isInspecting = false;
+        IsInspecting = false;
 
         if (dof != null)
             dof.focusDistance.value = 10f;
@@ -196,7 +208,6 @@ public class InspectManager : MonoBehaviour
             inspectRenderCamera.enabled = false;
     }
 
-    // --- Outline Layer Handling ---
     void CacheAndSetOutlineLayers(Transform target, int outlineLayer)
     {
         outlinedOriginalLayers.Clear();
@@ -229,7 +240,6 @@ public class InspectManager : MonoBehaviour
             SetLayerRecursive(t.GetChild(i), layer);
     }
 
-    // --- Blur ---
     IEnumerator FadeBlur(bool enable)
     {
         if (blurVolumeComponent == null) yield break;

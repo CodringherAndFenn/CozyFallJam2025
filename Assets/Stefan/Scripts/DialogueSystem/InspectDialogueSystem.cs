@@ -9,7 +9,7 @@ public class InspectDialogueSystem : MonoBehaviour
     [Header("UI References")]
     public GameObject dialogueBox;
     public TMP_Text dialogueText;
-    public MaskableGraphic dialogueBackground; // works with Image or RawImage
+    public MaskableGraphic dialogueBackground;
 
     [Header("Typewriter Settings")]
     public float typingSpeed = 0.03f;
@@ -25,37 +25,55 @@ public class InspectDialogueSystem : MonoBehaviour
     public AudioClip blipSound;
 
     [Header("Slide Animation Settings")]
-    public float slideDuration = 0.4f;  // time to move in/out
-    public float slideDistance = 300f;  // how far offscreen it starts
+    public float slideDuration = 0.4f;
+    public float slideDistance = 300f;
+    public float chunkDelay = 0.6f;
+
+    public static bool IsDialogueActive { get; private set; } = false;
 
     private Queue<string> textChunks;
     private bool isTyping = false;
     private bool dialogueActive = false;
+
     private RectTransform boxRect;
     private Vector2 originalAnchoredPos;
+    private CanvasGroup canvasGroup;
+
+    private string currentText = "";
+    private int currentCharIndex = 0;
 
     void Awake()
     {
+        if (dialogueBox == null)
+        {
+            Debug.LogError("[InspectDialogueSystem] DialogueBox not assigned.");
+            enabled = false;
+            return;
+        }
+
+        canvasGroup = dialogueBox.GetComponent<CanvasGroup>();
+        if (canvasGroup == null) canvasGroup = dialogueBox.AddComponent<CanvasGroup>();
+        canvasGroup.alpha = 0f;
+
         dialogueBox.SetActive(false);
+
         textChunks = new Queue<string>();
         boxRect = dialogueBox.GetComponent<RectTransform>();
         originalAnchoredPos = boxRect.anchoredPosition;
     }
 
-    // --- Start Dialogue ---
     public void StartDialogue(string fullText)
     {
         dialogueActive = true;
+        IsDialogueActive = true;
         dialogueBox.SetActive(true);
         textChunks.Clear();
 
-        // Set background sprite (if assigned)
         if (dialogueBackground is Image img && boxSprite != null)
             img.sprite = boxSprite;
         else if (dialogueBackground is RawImage raw && boxSprite != null)
             raw.texture = boxSprite.texture;
 
-        // Split text
         string[] words = fullText.Split(' ');
         List<string> chunks = new List<string>();
         for (int i = 0; i < words.Length; i += wordsPerChunk)
@@ -73,10 +91,10 @@ public class InspectDialogueSystem : MonoBehaviour
     IEnumerator SlideInThenStart()
     {
         yield return StartCoroutine(SlideIn());
+        yield return StartCoroutine(FadeCanvasGroup(1f, 0.2f));
         yield return StartCoroutine(DisplayNextChunk());
     }
 
-    // --- Slide In / Out Animations ---
     IEnumerator SlideIn()
     {
         Vector2 startPos = originalAnchoredPos - new Vector2(0, slideDistance);
@@ -90,7 +108,6 @@ public class InspectDialogueSystem : MonoBehaviour
             boxRect.anchoredPosition = Vector2.Lerp(startPos, endPos, Mathf.SmoothStep(0, 1, t));
             yield return null;
         }
-
         boxRect.anchoredPosition = endPos;
     }
 
@@ -110,7 +127,6 @@ public class InspectDialogueSystem : MonoBehaviour
         dialogueBox.SetActive(false);
     }
 
-    // --- Display Text ---
     IEnumerator DisplayNextChunk()
     {
         while (textChunks.Count > 0)
@@ -118,33 +134,35 @@ public class InspectDialogueSystem : MonoBehaviour
             string chunk = textChunks.Dequeue();
             yield return StartCoroutine(TypeText(chunk));
 
-            // small delay before wipe
-            yield return new WaitForSeconds(0.6f);
+            yield return new WaitForSeconds(chunkDelay);
             yield return StartCoroutine(FadeOutText(0.3f));
             yield return new WaitForSeconds(0.3f);
         }
 
+        yield return StartCoroutine(FadeCanvasGroup(0f, 0.2f));
         yield return StartCoroutine(SlideOut());
+
         dialogueActive = false;
+        IsDialogueActive = false; 
     }
 
     IEnumerator TypeText(string text)
     {
         isTyping = true;
+        currentText = text;
+        currentCharIndex = 0;
         dialogueText.text = "";
-        dialogueText.ForceMeshUpdate();
 
-        for (int i = 0; i < text.Length; i++)
+        while (currentCharIndex < currentText.Length)
         {
-            dialogueText.text += text[i];
+            dialogueText.text += currentText[currentCharIndex];
             dialogueText.ForceMeshUpdate();
 
-            // sound
-            if (blipSource && blipSound && i % 2 == 0)
+            if (blipSource && blipSound && currentCharIndex % 2 == 0)
                 blipSource.PlayOneShot(blipSound, Random.Range(0.4f, 0.6f));
 
-            // pop
-            StartCoroutine(PopLetterEffect(i));
+            StartCoroutine(PopLetterEffect(currentCharIndex));
+            currentCharIndex++;
 
             yield return new WaitForSeconds(typingSpeed);
         }
@@ -152,14 +170,12 @@ public class InspectDialogueSystem : MonoBehaviour
         isTyping = false;
     }
 
-    // --- Pop effect for letters ---
     IEnumerator PopLetterEffect(int index)
     {
         TMP_TextInfo textInfo = dialogueText.textInfo;
         dialogueText.ForceMeshUpdate();
 
         if (index >= textInfo.characterCount) yield break;
-
         var charInfo = textInfo.characterInfo[index];
         if (!charInfo.isVisible) yield break;
 
@@ -185,12 +201,11 @@ public class InspectDialogueSystem : MonoBehaviour
         dialogueText.ForceMeshUpdate();
     }
 
-    // --- Fade Out ---
     IEnumerator FadeOutText(float duration)
     {
-        float startAlpha = 1f;
-        float time = 0f;
         Color color = dialogueText.color;
+        float startAlpha = color.a;
+        float time = 0f;
 
         while (time < duration)
         {
@@ -206,4 +221,23 @@ public class InspectDialogueSystem : MonoBehaviour
         color.a = 1f;
         dialogueText.color = color;
     }
+
+    IEnumerator FadeCanvasGroup(float target, float duration)
+    {
+        if (canvasGroup == null) yield break;
+        float start = canvasGroup.alpha;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.unscaledDeltaTime;
+            canvasGroup.alpha = Mathf.Lerp(start, target, time / duration);
+            yield return null;
+        }
+
+        canvasGroup.alpha = target;
+    }
+
+    public void FadeOutForInventory() => StartCoroutine(FadeCanvasGroup(0f, 0.15f));
+    public void FadeInAfterInventory() => StartCoroutine(FadeCanvasGroup(1f, 0.2f));
 }

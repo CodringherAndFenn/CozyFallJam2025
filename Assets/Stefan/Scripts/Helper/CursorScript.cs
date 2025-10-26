@@ -7,7 +7,6 @@ public class CursorScript : MonoBehaviour
     public float crosshairScale = 1;
     void OnGUI()
     {
-        //if not paused
         if(Time.timeScale != 0)
         {
         	if(crosshairTexture!=null)

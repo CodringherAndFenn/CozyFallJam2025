@@ -6,8 +6,8 @@ using System.Collections.Generic;
 public class InventoryUI : MonoBehaviour
 {
     [Header("Grid References")]
-    public Transform gridParent;        // Content under ScrollView
-    public GameObject gridItemPrefab;   // Prefab for each inventory slot
+    public Transform gridParent;       
+    public GameObject gridItemPrefab;   
 
     [Header("Details Panel")]
     public GameObject detailsPanel;
@@ -15,12 +15,10 @@ public class InventoryUI : MonoBehaviour
     public TMP_Text detailsTitle;
     public TMP_Text detailsBody;
 
-    // Keep track of currently displayed buttons (so we can rebuild cleanly)
     private readonly List<GameObject> spawnedButtons = new List<GameObject>();
 
     public void Refresh(List<InventoryItem> items)
     {
-        // Clear old entries safely
         foreach (GameObject go in spawnedButtons)
         {
             if (go != null)
@@ -28,7 +26,6 @@ public class InventoryUI : MonoBehaviour
         }
         spawnedButtons.Clear();
 
-        // Build new buttons for each collected item
         foreach (var item in items)
         {
             if (item == null) continue;
@@ -37,7 +34,6 @@ public class InventoryUI : MonoBehaviour
             go.name = $"ItemButton_{item.itemName}";
             spawnedButtons.Add(go);
 
-            // Find icon & label (make sure prefab children are named correctly)
             Image icon = go.transform.Find("Icon")?.GetComponent<Image>();
             TMP_Text label = go.transform.Find("Name")?.GetComponent<TMP_Text>();
 
