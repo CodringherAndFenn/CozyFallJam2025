@@ -10,14 +10,14 @@ public class LeafBlowerInteraction : MonoBehaviour
     void Update()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, maxRange))
+        if (Physics.Raycast(transform.position, -transform.forward, out hit, maxRange))
         {
             if (hit.collider.CompareTag("Ground"))
                 target.position = hit.point;
         }
         else
         {
-            target.position = transform.position + transform.forward * maxRange;
+            target.position = transform.position - transform.forward * maxRange;
         }
         
         leafSystem.DoUpdate = Input.GetKey(KeyCode.Mouse0);

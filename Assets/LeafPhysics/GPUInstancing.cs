@@ -136,7 +136,8 @@ namespace LeafPhysics.Code
                     baseSeed = 1,
                     velocities = velocities,
                     matrices = matrices,
-                    gravity = gravity
+                    gravity = gravity,
+                    doUpdate = DoUpdate
                 }.Schedule(matrices.Length, 64);
 
                 job.Complete();
@@ -170,7 +171,8 @@ namespace LeafPhysics.Code
                         baseSeed = i + 1,
                         velocities = velocities,
                         matrices = matrices,
-                        gravity = gravity
+                        gravity = gravity,
+                        doUpdate = DoUpdate
                     }.Schedule(matrices.Length, 64);
 
                     job.Complete();
@@ -200,7 +202,7 @@ namespace LeafPhysics.Code
                     allVelocities[i] *= (1 - Time.deltaTime);
 
                     float dist = Vector3.Distance(head.position, pos);
-                    if (dist < radius)
+                    if (dist < radius && DoUpdate)
                     {
                         float t = 1 - dist / radius;
                         Vector3 dir = head.position - pos;
@@ -241,7 +243,7 @@ namespace LeafPhysics.Code
                         velocities[i][j] *= (1 - Time.deltaTime);
 
                         float dist = Vector3.Distance(head.position, pos);
-                        if (dist < radius)
+                        if (dist < radius && DoUpdate)
                         {
                             float t = 1 - dist / radius;
                             Vector3 dir = head.position - pos;
@@ -311,6 +313,8 @@ namespace LeafPhysics.Code
             [ReadOnly] public int baseSeed;
             [ReadOnly] public bool useSingleMatrix;
 
+            [ReadOnly] public bool doUpdate;
+
             public NativeArray<Matrix4x4> matrices;
             public NativeArray<Vector3> velocities;
 
@@ -326,7 +330,7 @@ namespace LeafPhysics.Code
                 velocities[index] -= (velocities[index]) * deltaTime;
                 var dist = Vector3.Distance(headPosition, pos);
 
-                if (dist < radius)
+                if (dist < radius && doUpdate)
                 {
                     var t = 1 - dist / radius;
                     var dir = headPosition - pos;
