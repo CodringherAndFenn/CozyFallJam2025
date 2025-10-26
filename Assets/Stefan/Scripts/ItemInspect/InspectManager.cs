@@ -165,9 +165,19 @@ public class InspectManager : MonoBehaviour
     void EndInspect()
     {
         if (currentObject != null)
+    {
+        // --- NEW: add to inventory if it has a pickup ---
+        var pickup = currentObject.GetComponent<PickupWhenInspected>();
+        if (pickup != null && pickup.item != null)
         {
-            currentObject.EndInspection();
-            currentObject = null;
+            InventoryManager.Instance.Add(pickup.item);
+            // Hide the world object after collecting
+            currentObject.gameObject.SetActive(false);
+        }
+        // -------------------------------------------------
+
+        currentObject.EndInspection();
+        currentObject = null;
         }
 
         fpc.enabled = true;

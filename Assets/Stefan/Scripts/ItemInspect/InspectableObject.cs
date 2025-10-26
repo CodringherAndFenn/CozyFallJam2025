@@ -15,7 +15,9 @@ public class InspectableObject : MonoBehaviour
     [Header("Inspect Text")]
     [TextArea(3, 6)]
     public string inspectDescription;
-    
+
+    [Header("Inventory Link")]
+    public PickupWhenInspected pickup; // optional reference if present
 
     // Store all original layers (for objects with children)
     private readonly Dictionary<Transform, int> originalLayers = new Dictionary<Transform, int>();
