@@ -14,10 +14,8 @@ public class PauseMenu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.L) || Input.GetKeyDown(KeyCode.P))
         {
-            Debug.Log("Pause Key pressed");
             if (GameIsPaused)
             {
-                Debug.Log("Game is paused");
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
                 Resume();
@@ -48,7 +46,6 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0f;
         GameIsPaused = true;
     }
-
     public void LoadMenu()
 
     {

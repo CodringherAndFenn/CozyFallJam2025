@@ -1,5 +1,7 @@
 using UnityEngine;
 using StarterAssets;
+using UnityEngine.Audio;
+
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem; 
 #endif
@@ -17,12 +19,17 @@ public class LeafblowerParticles : MonoBehaviour
     public bool useInputSystem = true; // set false if you use old Input.GetButton
 
     private StarterAssetsInputs input;
-
+    public AudioMixerGroup sfxMixerGroup;
     void Start()
     {
         if (blowerParticles == null)
         {
             Debug.LogWarning("[LeafblowerParticles] No particle system assigned!");
+        }
+
+        if (blowerSound != null && sfxMixerGroup != null)
+        {
+            blowerSound.outputAudioMixerGroup = sfxMixerGroup;
         }
 
         if (useInputSystem)

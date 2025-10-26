@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.roxdevvv.unityblendercontrol": {
+      "version": "https://github.com/RoxDevvv/Unity-Blender-Control-Style.git?path=/Assets/UnityBlenderControl",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "b59b016763ece7298de3cafb992b444c48ff17f6"
+    },
     "com.unity.ai.navigation": {
       "version": "2.0.9",
       "depth": 0,
@@ -221,10 +228,20 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
+        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.toolchain.linux-x86_64": {
+      "version": "2.0.10",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.sysroot": "2.0.10",
+        "com.unity.sysroot.linux-x86_64": "2.0.9"
       },
       "url": "https://packages.unity.com"
     },
@@ -256,6 +273,13 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "wischeropp.jonas.scene-view-pie-menu": {
+      "version": "https://github.com/JonasWischeropp/unity-scene-view-pie-menu.git#1.1.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "1e28a225eca69a2abf4a791c7b11220c69dc4866"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
