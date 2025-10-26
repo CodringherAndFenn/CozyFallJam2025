@@ -10,7 +10,7 @@ public class InspectSystem : MonoBehaviour
     void OnEnable()
     {
         if (objectToInspect != null)
-            currentRotation = objectToInspect.eulerAngles;
+            currentRotation = objectToInspect.localEulerAngles;
     }
 
     void Update()
@@ -25,7 +25,7 @@ public class InspectSystem : MonoBehaviour
             currentRotation.x -= mouseY * rotationSpeed * Time.deltaTime;
             currentRotation.y += mouseX * rotationSpeed * Time.deltaTime;
 
-            objectToInspect.rotation = Quaternion.Euler(currentRotation);
+            objectToInspect.localRotation = Quaternion.Euler(currentRotation);
         }
     }
 }
