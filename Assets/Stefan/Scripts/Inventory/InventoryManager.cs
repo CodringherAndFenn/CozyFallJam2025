@@ -17,6 +17,7 @@ public class InventoryManager : MonoBehaviour
     public FirstPersonController fpc;                 
     public StarterAssetsInputs starterInputs;         
     public InspectDialogueSystem dialogueSystem;     
+
     [Header("Data")]
     public List<InventoryItem> collected = new List<InventoryItem>();
 
@@ -67,9 +68,7 @@ public class InventoryManager : MonoBehaviour
         if (item == null) return;
 
         if (!collected.Contains(item))
-        {
             collected.Add(item);
-        }
 
         if (isOpen && inventoryUI != null)
             inventoryUI.Refresh(collected);
@@ -78,9 +77,7 @@ public class InventoryManager : MonoBehaviour
     public void ToggleInventory()
     {
         if (inventoryUI == null)
-        {
             return;
-        }
 
         isOpen = !isOpen;
         IsOpen = isOpen;
@@ -89,18 +86,24 @@ public class InventoryManager : MonoBehaviour
 
         if (isOpen)
         {
+            // --- OPEN INVENTORY ---
             inventoryUI.Refresh(collected);
 
             if (dialogueSystem != null)
                 dialogueSystem.FadeOutForInventory();
 
-            if (fpc != null) fpc.enabled = false;
-               
+            if (fpc != null)
+                fpc.enabled = false;
+
 #if ENABLE_INPUT_SYSTEM
-            if (playerInput != null) playerInput.enabled = false;
+            if (playerInput != null)
+                playerInput.enabled = false;
 #endif
             if (starterInputs != null)
+            {
                 starterInputs.cursorInputForLook = false;
+                starterInputs.cursorLocked = false; // 🔓 Prevent auto re-lock from OnApplicationFocus
+            }
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -109,18 +112,24 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
+            // --- CLOSE INVENTORY ---
             Time.timeScale = 1f;
 
             if (dialogueSystem != null)
                 dialogueSystem.FadeInAfterInventory();
 
-            if (fpc != null) fpc.enabled = true;
+            if (fpc != null)
+                fpc.enabled = true;
 
 #if ENABLE_INPUT_SYSTEM
-            if (playerInput != null) playerInput.enabled = true;
+            if (playerInput != null)
+                playerInput.enabled = true;
 #endif
             if (starterInputs != null)
+            {
                 starterInputs.cursorInputForLook = true;
+                starterInputs.cursorLocked = true; // 🔒 Allow normal lock again
+            }
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
