@@ -35,6 +35,9 @@ public class InspectManager : MonoBehaviour
     private DepthOfField dof;
     private readonly Dictionary<Transform, int> outlinedOriginalLayers = new Dictionary<Transform, int>();
 
+    [Header("Dialogue System")]
+    public InspectDialogueSystem dialogueSystem;
+
     void Start()
     {
         cam = Camera.main;
@@ -134,6 +137,11 @@ public class InspectManager : MonoBehaviour
         isInspecting = true;
         currentObject = obj;
         obj.StartInspection(inspectTarget); // This sets Inspect layer
+
+        if (dialogueSystem != null && !string.IsNullOrEmpty(obj.inspectDescription))
+        {
+            dialogueSystem.StartDialogue(obj.inspectDescription);
+        }
 
         fpc.enabled = false;
         inspectSystem.objectToInspect = obj.transform;

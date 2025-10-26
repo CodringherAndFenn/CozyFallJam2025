@@ -4,12 +4,18 @@ using System.Collections.Generic;
 
 public class InspectableObject : MonoBehaviour
 {
+
     private Vector3 originalPosition;
     private Quaternion originalRotation;
     private Vector3 originalScale;
     private Transform originalParent;
     private bool isBeingInspected = false;
     private Collider col;
+
+    [Header("Inspect Text")]
+    [TextArea(3, 6)]
+    public string inspectDescription;
+    
 
     // Store all original layers (for objects with children)
     private readonly Dictionary<Transform, int> originalLayers = new Dictionary<Transform, int>();
@@ -18,7 +24,6 @@ public class InspectableObject : MonoBehaviour
     public float moveSpeed = 8f;
     public float scaleFactor = 0.8f;
     public float viewDistance = 0.2f;
-
     void Awake()
     {
         col = GetComponent<Collider>();
